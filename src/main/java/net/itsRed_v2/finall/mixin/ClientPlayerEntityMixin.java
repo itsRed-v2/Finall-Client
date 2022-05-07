@@ -1,6 +1,7 @@
 package net.itsRed_v2.finall.mixin;
 
-import net.itsRed_v2.finall.FinallClient;
+import net.itsRed_v2.finall.event.EventManager;
+import net.itsRed_v2.finall.events.ChatOutputListener.ChatOutputEvent;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,8 +11,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayerEntity.class)
 public class ClientPlayerEntityMixin {
 
-	@Inject(at = @At("HEAD"), method = "sendChatMessage(Ljava/lang/String;)V")
+	@Inject(method = "sendChatMessage(Ljava/lang/String;)V",
+			at = @At("HEAD"),
+			cancellable = true)
 	private void onSendMessage(String message, CallbackInfo info) {
-		FinallClient.LOGGER.info("Chat output: " + message);
+		ChatOutputEvent event = new ChatOutputEvent(message);
+		EventManager.fire(event);
+
+		if (event.isCancelled())
+			info.cancel();
+
 	}
 }
