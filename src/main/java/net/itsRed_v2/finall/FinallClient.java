@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer;
 import net.itsRed_v2.finall.command.CommandProcessor;
 import net.itsRed_v2.finall.event.EventManager;
 import net.itsRed_v2.finall.events.ChatOutputListener;
+import net.minecraft.client.MinecraftClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ public class FinallClient implements ModInitializer {
 	public static final String MOD_ID = "finall";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	public static final MinecraftClient MC = MinecraftClient.getInstance();
 	private static final EventManager eventManager = new EventManager();
 
 	@Override
